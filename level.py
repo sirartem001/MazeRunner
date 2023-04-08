@@ -54,11 +54,11 @@ def by_y(sprite):
 class CameraGroup(pygame.sprite.Group):
     def __init__(self):
         super().__init__()
-        self.wall = None
+        self.wall = []
         self.focus = None
         self.display_surface = pygame.display.get_surface()
         # setting up light engine
-        self.Light = PygameLights.LIGHT(100, PygameLights.pixel_shader(100, (218, 122, 122), 100, 0))
+        # self.Light = PygameLights.LIGHT(100, PygameLights.pixel_shader(100, (218, 122, 122), 100, 0))
 
     def set_focus(self, focus):
         self.focus = focus
@@ -73,6 +73,6 @@ class CameraGroup(pygame.sprite.Group):
             # self.display_surface.blit(sprite.image, sprite.rect)
 
         # light display
-        light_display = pygame.Surface((self.display_surface.get_size()))
-        light_display.blit(PygameLights.global_light(self.display_surface.get_size(), 0), (0, 0))
-        self.Light.main(self.wall)
+        # light_display = pygame.Surface((self.display_surface.get_size()))
+        # light_display.blit(PygameLights.global_light(self.display_surface.get_size(), 0), (0, 0))
+        # self.Light.main(self.wall)
