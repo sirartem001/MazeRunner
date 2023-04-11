@@ -5,6 +5,7 @@ import PygameLights
 from support import *
 from player import Player
 from monstr import Monster
+from wall import Wall
 from settings import CELL_SIZE
 from copy import copy
 
