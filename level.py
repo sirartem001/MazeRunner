@@ -1,13 +1,12 @@
-from copy import copy
-
 import pygame
 
-from player import Player
 import lab
+import PygameLights
 from support import *
+from player import Player
 from monstr import Monster
 from settings import CELL_SIZE
-import PygameLights
+from copy import copy
 
 
 class Level:

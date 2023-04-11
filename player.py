@@ -1,7 +1,9 @@
 import pygame
-from support import *
 from os import getcwd
+
+from support import *
 from settings import CELL_SIZE
+
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, pos, group, maze):

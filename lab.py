@@ -1,12 +1,9 @@
 import numpy as np
 import random
 
+from settings import *
+
 random.seed()
-
-LAB_SIZE = 100
-
-OFFSETT = 2
-
 
 def borders():
     grid = make_maze()
