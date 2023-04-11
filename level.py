@@ -6,7 +6,8 @@ from support import *
 from player import Player
 from monstr import Monster
 from wall import Wall
-from settings import CELL_SIZE
+from exit import Exit
+from settings import *
 from copy import copy
 
 
@@ -18,7 +19,8 @@ class Level:
         self.monstr = None
         self.wall = []
         self.player = None
-
+        self.running = True
+        self.exit = None
         # get the display surface
         self.display_surface = pygame.display.get_surface()
 
@@ -40,11 +42,18 @@ class Level:
                     self.all_sprites.sprites().append(self.wall[-1])
                     self.all_sprites.wall.append(self.wall[-1].rect)
         self.monstr = Monster((150, 150), self.all_sprites, self.maze, self.player)
+        self.exit = Exit(self.maze, self.all_sprites)
+
+    def check_death(self):
+        if self.player.pos.x - self.monstr.pos.x < MIN_LEN \
+                and self.player.pos.y - self.monstr.pos.y < MIN_LEN:
+            self.running = False
 
     def run(self, dt):
         self.all_sprites.update(dt)
         self.display_surface.fill('black')
         self.all_sprites.custom_draw()
+        # self.check_death()
 
 
 def by_y(sprite):
