@@ -7,6 +7,7 @@ from player import Player
 from monstr import Monster
 from wall import Wall
 from exit import Exit
+from floor import Floor
 from settings import *
 from copy import copy
 
@@ -17,6 +18,7 @@ class Level:
         self.player_sprites = None
         self.all_sprites = None
         self.monstr = None
+        self.crow = False
         self.wall = []
         self.player = None
         self.running = True
@@ -30,7 +32,6 @@ class Level:
     def setup(self):
         # generating maze
         self.maze = lab.borders()
-
         # setting up camera and sprites
         self.all_sprites = CameraGroup()
         self.player = Player((150, 150), self.all_sprites, self.maze)
@@ -40,7 +41,8 @@ class Level:
                 if not self.maze[i][j]:
                     self.wall.append(Wall((i * CELL_SIZE, j * CELL_SIZE), self.all_sprites))
                     self.all_sprites.sprites().append(self.wall[-1])
-                    self.all_sprites.wall.append(self.wall[-1].rect)
+                else:
+                    self.all_sprites.sprites().append((Floor((i * CELL_SIZE, j * CELL_SIZE), self.all_sprites)))
         self.monstr = Monster((150, 150), self.all_sprites, self.maze, self.player)
         self.exit = Exit(self.maze, self.all_sprites)
 
@@ -57,7 +59,9 @@ class Level:
 
 
 def by_y(sprite):
-    return sprite.rect.y
+    if type(sprite).__name__ != "Floor":
+        return sprite.rect.y
+    return 0
 
 
 class CameraGroup(pygame.sprite.Group):
@@ -67,7 +71,8 @@ class CameraGroup(pygame.sprite.Group):
         self.focus = None
         self.display_surface = pygame.display.get_surface()
         # setting up light engine
-        # self.Light = PygameLights.LIGHT(100, PygameLights.pixel_shader(100, (218, 122, 122), 100, 0))
+        self.LightGreen = PygameLights.LIGHT(1000, PygameLights.pixel_shader(1000, (130, 255, 255), 1, False))
+        self.LightRed = PygameLights.LIGHT(1000, PygameLights.pixel_shader(1000, (255, 100, 100), 1, False))
 
     def set_focus(self, focus):
         self.focus = focus
@@ -75,13 +80,16 @@ class CameraGroup(pygame.sprite.Group):
     def custom_draw(self):
         sprites = self.sprites()
         surface_blit = self.display_surface.blit
+        wall = []
         for spr in sorted(sprites, key=by_y):
             rect = copy(spr.rect)
-
+            if type(spr).__name__ == "Wall":
+                wall.append(rect.move(540 - self.focus.pos.x, 360 - self.focus.pos.y))
             self.spritedict[spr] = surface_blit(spr.image, rect.move(540 - self.focus.pos.x, 360 - self.focus.pos.y))
             # self.display_surface.blit(sprite.image, sprite.rect)
 
         # light display
-        # light_display = pygame.Surface((self.display_surface.get_size()))
-        # light_display.blit(PygameLights.global_light(self.display_surface.get_size(), 0), (0, 0))
-        # self.Light.main(self.wall)
+        light_display = pygame.Surface((self.display_surface.get_size()))
+        light_display.blit(PygameLights.global_light(self.display_surface.get_size(), 0), (0, 0))
+        self.LightRed.main(wall, light_display, 540, 360)
+        self.display_surface.blit(light_display, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)

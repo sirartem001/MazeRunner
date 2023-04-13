@@ -83,10 +83,14 @@ class Player(pygame.sprite.Sprite):
         cell_y = int(self.pos.y / CELL_SIZE)
         v = pygame.Vector2(0, 0)
         cell_x = 0
-        if not self.maze[int((self.pos.x + 5) / CELL_SIZE)][cell_y]:
-            cell_x = int((self.pos.x + 5) / CELL_SIZE)
+        if not self.maze[int((self.pos.x + 15) / CELL_SIZE)][cell_y]:
+            cell_x = int((self.pos.x + 15) / CELL_SIZE)
         else:
-            cell_x = int((self.pos.x - 5) / CELL_SIZE)
+            cell_x = int((self.pos.x - 15) / CELL_SIZE)
+        if not self.maze[cell_x][int((self.pos.y + 15) / CELL_SIZE)]:
+            cell_y = int((self.pos.y + 15) / CELL_SIZE)
+        else:
+            cell_y = int((self.pos.y - 15) / CELL_SIZE)
         if not self.maze[cell_x][cell_y]:
             if self.pos.x < float(cell_x * CELL_SIZE + CELL_SIZE / 2) \
                     and self.direction.x != 0:
