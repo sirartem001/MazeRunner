@@ -17,7 +17,7 @@ class Exit(pygame.sprite.Sprite):
             y = int(random.random() * LAB_SIZE)
             if grid[x][y]:
                 break
-        self.pos = pygame.math.Vector2(x * CELL_SIZE, y * CELL_SIZE)
+        self.pos = pygame.math.Vector2(x * CELL_SIZE + 50, y * CELL_SIZE + 50)
         self.image = pygame.image.load("graphics/exit.png")
-        self.rect = self.image.get_rect(center=(self.pos.x - 50, self.pos.y - 50))
+        self.rect = self.image.get_rect(center=(self.pos.x, self.pos.y))
 

@@ -21,8 +21,9 @@ class Level:
         self.crow = False
         self.wall = []
         self.player = None
-        self.running = True
+        self.state = True
         self.exit = None
+        self.chace = False
         # get the display surface
         self.display_surface = pygame.display.get_surface()
 
@@ -49,13 +50,22 @@ class Level:
     def check_death(self):
         if self.player.pos.x - self.monstr.pos.x < MIN_LEN \
                 and self.player.pos.y - self.monstr.pos.y < MIN_LEN:
-            self.running = False
+            self.state = 3
+
+    def check_win(self):
+        if abs(self.player.pos.x - self.exit.pos.x) < 25 \
+                and abs(self.player.pos.y - self.exit.pos.y) < 25:
+            self.state = False
+
+
+
 
     def run(self, dt):
         self.all_sprites.update(dt)
         self.display_surface.fill('black')
-        self.all_sprites.custom_draw()
+        self.all_sprites.custom_draw(self.chace)
         # self.check_death()
+        self.check_win()
 
 
 def by_y(sprite):
@@ -77,7 +87,7 @@ class CameraGroup(pygame.sprite.Group):
     def set_focus(self, focus):
         self.focus = focus
 
-    def custom_draw(self):
+    def custom_draw(self, chace):
         sprites = self.sprites()
         surface_blit = self.display_surface.blit
         wall = []
@@ -91,5 +101,8 @@ class CameraGroup(pygame.sprite.Group):
         # light display
         light_display = pygame.Surface((self.display_surface.get_size()))
         light_display.blit(PygameLights.global_light(self.display_surface.get_size(), 0), (0, 0))
-        self.LightRed.main(wall, light_display, 540, 360)
+        if not chace:
+            self.LightGreen.main(wall, light_display, 540, 360)
+        else:
+            self.LightRed.main(wall, light_display, 540, 360)
         self.display_surface.blit(light_display, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
