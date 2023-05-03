@@ -1,6 +1,10 @@
 import pygame
 
 
+HERO_ANIMATION_PATH = '/graphics/Player/'
+CRAW_GOD_ANIMATION_PATH = '/graphics/CrowGod/'
+
+
 def import_folder(path):
     surface_list = []
     for img in range(4):
